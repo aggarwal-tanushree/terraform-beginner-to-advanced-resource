@@ -7,48 +7,64 @@ https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/secu
 ### reference-attributes.tf
 
 ```sh
+terraform {
+  required_providers {
+    aws = {
+      source = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+     /* github = {
+      source = "integrations/github"
+    }*/
+  }
+}
+
 provider "aws" {
-  region = "us-east-1"
+    region = "eu-central-1"
+    profile = "terraform"
 }
 
-resource "aws_eip" "lb" {
-  domain   = "vpc"
-}
+resource "aws_eip" "eip" {
+  domain = "vpc"
 
-resource "aws_eip" "lb2" {
-  domain   = "vpc"
+  tags = {
+    Name = "iac_eip "
+  }
 }
-
 
 resource "aws_security_group" "allow_tls" {
-  name        = "allow_tls"
-  description = "Allow TLS inbound traffic"
-
+  name = "allow_tls1"
+  description = "Allows TLS inbound traffic"
 
   ingress {
-    description      = "TLS from VPC"
-    from_port        = 443
-    to_port          = 443
-    protocol         = "tcp"
-    cidr_blocks      = ["${aws_eip.lb.public_ip}/32"]
+    description = "TLS for default VPC"
+    from_port   = 443
+    to_port =   443
+    protocol =  "tcp"
+    cidr_blocks  = ["${aws_eip.eip.public_ip}/32"] 
   }
 
   egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
+    from_port = 0
+    to_port = 0
+    protocol = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "all outbound"
+
   }
 
   tags = {
-    Name = "allow_tls"
+    Name = "allow_tls_sg"
   }
 }
+
+
 ```
 
 ### Commands Used:
 ```sh
+terraform plan
+terraform apply
 terraform apply -auto-approve
 terraform destroy -auto-approve
 ```
