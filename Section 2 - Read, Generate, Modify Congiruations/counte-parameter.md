@@ -3,30 +3,30 @@
 ### iam-count-parameter.tf
 
 ```sh
+
 provider "aws" {
-  region     = "us-west-2"
-  access_key = "YOUR-ACCESS-KEY"
-  secret_key = "YOUR-SECRET-KEY"
+    region = "eu-central-1"
+    profile = "terraform"
 }
 
-variable "elb_names" {
-  type = list
-  default = ["dev-loadbalancer", "stage-loadbalanacer","prod-loadbalancer"]
-}
+variable "name_list" {
+    type = list
+    default = ["user-1" , "user-2" , "user-3"]
 
-resource "aws_iam_user" "lb" {
-  name = var.elb_names[count.index]
-  count = 3
-  path = "/system/"
+}
+resource aws_iam_user "usr"{
+    name = var.name_list[count.index]
+    count = 3
+
 }
 ```
 ### count-paremeter.tf
 
 ```sh
+
 provider "aws" {
-  region     = "us-west-2"
-  access_key = "YOUR-ACCESS-KEY"
-  secret_key = "YOUR-SECRET-KEY"
+    region = "eu-central-1"
+    profile = "terraform"
 }
 
 
