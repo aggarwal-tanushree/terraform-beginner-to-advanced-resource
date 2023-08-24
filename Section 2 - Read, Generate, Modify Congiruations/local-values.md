@@ -1,35 +1,29 @@
-## This snippet is from the Local Values video.
+## Local Values example.
 
 ### local-values.tf
 
 ```sh
 provider "aws" {
-  region     = "ap-southeast-1"
-  access_key = "YOUR-ACCESS-KEY"
-  secret_key = "YOUR-SECRET-KEY"
+    profile = "terraform"
+    region = "eu-central-1"
 }
 
 locals {
-  common_tags = {
-    Owner = "DevOps Team"
-    service = "backend"
-  }
-}
-resource "aws_instance" "app-dev" {
-   ami = "ami-082b5a644766e0e6f"
-   instance_type = "t2.micro"
-   tags = local.common_tags
+    common_tags = {
+        dept = "DevOps"
+        env = "test"
+    }
 }
 
-resource "aws_instance" "db-dev" {
-   ami = "ami-082b5a644766e0e6f"
-   instance_type = "t2.small"
-   tags = local.common_tags
+resource "aws_instance" "dev_instance" {
+  ami = "ami-0c4c4bd6cf0c5fe52"
+  instance_type = "t2.micro"
+  tags = local.common_tags
 }
 
 resource "aws_ebs_volume" "db_ebs" {
-  availability_zone = "us-west-2a"
-  size              = 8
+  availability_zone = "eu-central-1a"
+  size = 8
   tags = local.common_tags
 }
 ```
