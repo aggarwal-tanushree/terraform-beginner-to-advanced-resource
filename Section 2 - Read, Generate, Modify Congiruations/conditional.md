@@ -1,32 +1,36 @@
-## This snippet is from the Conditional Expression Video.
+## Conditional Expression
 
 ### conditional.tf
 
 ```sh
 
 provider "aws" {
-  region     = "us-west-2"
-  access_key = "YOUR-ACCESS-KEY"
-  secret_key = "YOUR-SECRET-KEY"
+    profile = "terraform"
+    region = "eu-central-1"
+
 }
 
-variable "istest" {}
 
-resource "aws_instance" "dev" {
-   ami = "ami-082b5a644766e0e6f"
-   instance_type = "t2.micro"
-   count = var.istest == true ? 3 : 0
+variable "instance_is_dev" {}
+
+resource "aws_instance" "dev_instance" {
+    ami = "ami-0c4c4bd6cf0c5fe52"
+    instance_type = "t2.micro"
+    count = var.instance_is_dev == true ? 1 : 0
+
 }
 
-resource "aws_instance" "prod" {
-   ami = "ami-082b5a644766e0e6f"
-   instance_type = "t2.large"
-   count = var.istest == false ? 1 : 0
+resource "aws_instance" "prod_ins" {
+    ami = "ami-0c4c4bd6cf0c5fe52"
+    instance_type = "t2.large"
+    count = var.instance_is_dev == false ? 1 : 0
+  
 }
+
 ```
 
 ### terraform.tfvars
 
 ```sh
-istest = false
+instance_is_dev = true
 ```
